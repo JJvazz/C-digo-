@@ -1,0 +1,10 @@
+# memoria_estatica.py
+print("--- Memoria Estática ---")
+calificaciones = [0] * 5  # Reservamos 5 espacios fijos
+
+for i in range(5):
+    # Mostramos {i + 1} para que el usuario vea 1, 2, 3, 4, 5
+    entrada = input(f"Captura la calificación {i + 1}: ")
+    calificaciones[i] = int(entrada) if entrada.isdigit() else 0
+
+print("Arreglo final de calificaciones:", calificaciones)

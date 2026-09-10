@@ -1,0 +1,20 @@
+# memoria_dinamica.py
+print("--- Memoria Dinámica ---")
+frutas = []  # Lista vacía que crecerá según lo que ingreses
+
+print("Ingresa nombres de frutas (escribe 'salir' para terminar):")
+
+# Usamos un ciclo infinito que se rompe cuando escribes 'salir'
+while True:
+    nueva_fruta = input("Nombre de la fruta: ")
+    if nueva_fruta.lower() == 'salir':
+        break
+    frutas.append(nueva_fruta)  # La memoria crece dinámicamente aquí
+
+print("\nLista de frutas que ingresaste:", frutas)
+
+# Demostración de cómo se encoge la memoria
+if len(frutas) > 0:
+    print("\nBorrando la primera fruta de la lista para liberar espacio...")
+    frutas.pop(0)
+    print("Lista final tras borrar el primer elemento:", frutas)

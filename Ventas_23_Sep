@@ -1,0 +1,100 @@
+class MatrizVentas:
+    def __init__(self):
+        self.meses = [
+            "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+            "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        ]
+        self.departamentos = ["Ropa", "Deportes", "Juguetería"]
+        # Inicialización de la tabla en 0.0 (12 filas x 3 columnas)
+        self.tabla = [[0.0 for _ in range(3)] for _ in range(12)]
+
+    # 1. Método para insertar elementos en el arreglo
+    def insertar(self, mes, depto, venta):
+        if 0 <= mes < 12 and 0 <= depto < 3:
+            self.tabla[mes][depto] = venta
+            print(f"-> Venta de ${venta:.2f} asignada a {self.departamentos[depto]} en {self.meses[mes]}.")
+        else:
+            print("-> Error: Mes o departamento fuera de rango.")
+
+    # 2. Método para buscar algún elemento en particular
+    def buscar(self, venta_buscar):
+        encontrado = False
+        print(f"\nBuscando ventas con valor: ${venta_buscar:.2f}...")
+        for i in range(12):
+            for j in range(3):
+                if self.tabla[i][j] == venta_buscar:
+                    print(f"   [Coincidencia] Mes: {self.meses[i]} | Depto: {self.departamentos[j]} | Valor: ${self.tabla[i][j]:.2f}")
+                    encontrado = True
+        if not encontrado:
+            print("-> No se encontraron registros con esa cantidad.")
+
+    # 3. Método para eliminar una venta en particular de algún departamento
+    def eliminar(self, mes, depto):
+        if 0 <= mes < 12 and 0 <= depto < 3:
+            valor_anterior = self.tabla[mes][depto]
+            self.tabla[mes][depto] = 0.0
+            print(f"-> Venta de ${valor_anterior:.2f} en {self.departamentos[depto]} ({self.meses[mes]}) eliminada (reiniciada a 0.0).")
+        else:
+            print("-> Error: Mes o departamento fuera de rango.")
+
+    def mostrar_tabla(self):
+        print("\n" + "=" * 56)
+        print(f"{'Mes':<12} | {'Ropa':<10} | {'Deportes':<10} | {'Juguetería':<10}")
+        print("-" * 56)
+        for i in range(12):
+            print(f"{self.meses[i]:<12} | ${self.tabla[i][0]:<9.2f} | ${self.tabla[i][1]:<9.2f} | ${self.tabla[i][2]:<9.2f}")
+        print("=" * 56 + "\n")
+
+
+def menu():
+    sistema = MatrizVentas()
+
+    while True:
+        print("\n--- MENÚ CONTROL DE VENTAS ---")
+        print("1. Ver tabla de ventas")
+        print("2. Insertar elemento en el arreglo")
+        print("3. Buscar un elemento particular")
+        print("4. Eliminar venta de un departamento")
+        print("5. Salir")
+        opcion = input("Elige una opción (1-5): ").strip()
+
+        if opcion == "1":
+            sistema.mostrar_tabla()
+
+        elif opcion == "2":
+            print("\nDepartamentos: 0 = Ropa, 1 = Deportes, 2 = Juguetería")
+            print("Meses: 0 = Enero, 1 = Febrero, ..., 11 = Diciembre")
+            try:
+                mes = int(input("Ingresa el número de mes (0-11): "))
+                depto = int(input("Ingresa el número de departamento (0-2): "))
+                monto = float(input("Ingresa el monto de la venta: "))
+                sistema.insertar(mes, depto, monto)
+            except ValueError:
+                print("-> Entrada no válida. Ingresa números.")
+
+        elif opcion == "3":
+            try:
+                monto = float(input("Ingresa el monto exacto que deseas buscar: "))
+                sistema.buscar(monto)
+            except ValueError:
+                print("-> Entrada no válida.")
+
+        elif opcion == "4":
+            print("\nDepartamentos: 0 = Ropa, 1 = Deportes, 2 = Juguetería")
+            print("Meses: 0 = Enero, 1 = Febrero, ..., 11 = Diciembre")
+            try:
+                mes = int(input("Ingresa el número de mes (0-11): "))
+                depto = int(input("Ingresa el número de departamento (0-2): "))
+                sistema.eliminar(mes, depto)
+            except ValueError:
+                print("-> Entrada no válida.")
+
+        elif opcion == "5":
+            print("Saliendo del programa...")
+            break
+        else:
+            print("Opción incorrecta, intenta de nuevo.")
+
+
+if __name__ == "__main__":
+    menu()

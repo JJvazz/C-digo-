@@ -1,0 +1,53 @@
+def generar_fibonacci(n):
+    """Genera la serie de Fibonacci hasta 'n' elementos."""
+    if n <= 0: return []
+    elif n == 1: return [0]
+    
+    serie = [0, 1]
+    for _ in range(2, n):
+        serie.append(serie[-1] + serie[-2])
+    return serie
+
+def estimar_proyecto():
+    # 1. Generamos los números de Fibonacci para usarlos como "Puntos"
+    # Generamos 9 elementos: [0, 1, 1, 2, 3, 5, 8, 13, 21]
+    secuencia_base = generar_fibonacci(9)
+    
+    # Limpiamos la lista para quitar el 0 y el 1 duplicado (común en Planning Poker)
+    valores_permitidos = list(set(secuencia_base))
+    valores_permitidos.remove(0)
+    valores_permitidos.sort() # Queda: [1, 2, 3, 5, 8, 13, 21]
+    
+    print("--- Estimación de Proyectos de Software (Scrum) ---")
+    print(f"Valores de Fibonacci permitidos para evaluar la complejidad: {valores_permitidos}")
+    
+    tareas = []
+    total_puntos = 0
+    
+    # 2. Ciclo para registrar tareas
+    while True:
+        tarea = input("\nIngresa el nombre de la tarea (o escribe 'fin' para terminar): ")
+        if tarea.lower() == 'fin':
+            break
+            
+        try:
+            puntos = int(input(f"Asigna la complejidad a '{tarea}' usando solo Fibonacci {valores_permitidos}: "))
+            
+            # 3. Validamos que el número pertenezca a la serie de Fibonacci
+            if puntos in valores_permitidos:
+                tareas.append((tarea, puntos))
+                total_puntos += puntos
+                print("✅ Tarea guardada con éxito.")
+            else:
+                print("❌ Error: La estimación debe ser un número exacto de la serie de Fibonacci mostrada.")
+        except ValueError:
+            print("❌ Error: Por favor, ingresa un número válido.")
+            
+    # 4. Resumen final
+    print("\n--- Resumen del Proyecto ---")
+    for t in tareas:
+        print(f"📌 {t[0]}: {t[1]} puntos de historia")
+    print(f"📈 Complejidad Total del Proyecto: {total_puntos} puntos")
+
+if __name__ == "__main__":
+    estimar_proyecto()

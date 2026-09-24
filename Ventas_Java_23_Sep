@@ -1,0 +1,126 @@
+import java.util.Scanner;
+
+public class ControlVentas {
+    // Matriz bidimensional 12 filas (meses) x 3 columnas (departamentos)
+    private double[][] tabla;
+    private String[] meses = {
+        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+        "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+    };
+    private String[] departamentos = {"Ropa", "Deportes", "Juguetería"};
+
+    public ControlVentas() {
+        // En Java un arreglo numérico se inicializa automáticamente en 0.0
+        this.tabla = new double[12][3];
+    }
+
+    // 1. Método para insertar elementos en el arreglo
+    public void insertar(int mes, int depto, double monto) {
+        if (mes >= 0 && mes < 12 && depto >= 0 && depto < 3) {
+            tabla[mes][depto] = monto;
+            System.out.printf("-> Venta de $%.2f asignada a %s en %s.%n", monto, departamentos[depto], meses[mes]);
+        } else {
+            System.out.println("-> Error: Mes o departamento fuera de rango.");
+        }
+    }
+
+    // 2. Método para buscar algún elemento en particular
+    public void buscar(double monto) {
+        boolean hallado = false;
+        System.out.printf("%nBuscando registros con valor: $%.2f...%n", monto);
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (tabla[i][j] == monto) {
+                    System.out.printf("   [Coincidencia] Mes: %s | Depto: %s | Valor: $%.2f%n", meses[i], departamentos[j], tabla[i][j]);
+                    hallado = true;
+                }
+            }
+        }
+        if (!hallado) {
+            System.out.println("-> No se encontraron registros con esa cantidad.");
+        }
+    }
+
+    // 3. Método para eliminar una venta en particular de algún departamento
+    public void eliminar(int mes, int depto) {
+        if (mes >= 0 && mes < 12 && depto >= 0 && depto < 3) {
+            double valorPrevio = tabla[mes][depto];
+            tabla[mes][depto] = 0.0;
+            System.out.printf("-> Venta de $%.2f en %s (%s) eliminada (reiniciada a 0.0).%n", valorPrevio, departamentos[depto], meses[mes]);
+        } else {
+            System.out.println("-> Error: Mes o departamento fuera de rango.");
+        }
+    }
+
+    public void mostrarTabla() {
+        System.out.println("\n========================================================");
+        System.out.printf("%-12s | %-10s | %-10s | %-10s%n", "Mes", "Ropa", "Deportes", "Juguetería");
+        System.out.println("--------------------------------------------------------");
+        for (int i = 0; i < 12; i++) {
+            System.out.printf("%-12s | $%-9.2f | $%-9.2f | $%-9.2f%n",
+                    meses[i], tabla[i][0], tabla[i][1], tabla[i][2]);
+        }
+        System.out.println("========================================================\n");
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ControlVentas app = new ControlVentas();
+        int opcion = 0;
+
+        do {
+            System.out.println("\n--- MENÚ CONTROL DE VENTAS ---");
+            System.out.println("1. Ver tabla de ventas");
+            System.out.println("2. Insertar elemento en el arreglo");
+            System.out.println("3. Buscar un elemento particular");
+            System.out.println("4. Eliminar venta de un departamento");
+            System.out.println("5. Salir");
+            System.out.print("Elige una opción (1-5): ");
+
+            if (!sc.hasNextInt()) {
+                System.out.println("Entrada inválida.");
+                sc.next();
+                continue;
+            }
+            opcion = sc.nextInt();
+
+            switch (opcion) {
+                case 1:
+                    app.mostrarTabla();
+                    break;
+                case 2:
+                    System.out.println("\nDepartamentos: 0 = Ropa, 1 = Deportes, 2 = Juguetería");
+                    System.out.println("Meses: 0 = Enero, 1 = Febrero, ..., 11 = Diciembre");
+                    System.out.print("Mes (0-11): ");
+                    int mesIns = sc.nextInt();
+                    System.out.print("Departamento (0-2): ");
+                    int depIns = sc.nextInt();
+                    System.out.print("Monto a registrar: ");
+                    double montoIns = sc.nextDouble();
+                    app.insertar(mesIns, depIns, montoIns);
+                    break;
+                case 3:
+                    System.out.print("\nIngresa el monto a buscar: ");
+                    double montoBusc = sc.nextDouble();
+                    app.buscar(montoBusc);
+                    break;
+                case 4:
+                    System.out.println("\nDepartamentos: 0 = Ropa, 1 = Deportes, 2 = Juguetería");
+                    System.out.println("Meses: 0 = Enero, 1 = Febrero, ..., 11 = Diciembre");
+                    System.out.print("Mes (0-11): ");
+                    int mesDel = sc.nextInt();
+                    System.out.print("Departamento (0-2): ");
+                    int depDel = sc.nextInt();
+                    app.eliminar(mesDel, depDel);
+                    break;
+                case 5:
+                    System.out.println("Saliendo del programa...");
+                    break;
+                default:
+                    System.out.println("Opción no válida.");
+            }
+        } while (opcion != 5);
+
+        sc.close();
+    }
+}
